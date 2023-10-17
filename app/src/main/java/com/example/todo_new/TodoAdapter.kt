@@ -4,35 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todo_new.databinding.TodoBinding
 
-class TodoAdapter(
-    private val todos: MutableList<Todo>
-) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>()
-{
-    class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        return TodoViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.todo,
-                parent,
-                false
-
-
-            )
-        )
-    }
+abstract class TodoAdapter(private val todos: MutableList<Todo>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+    class TodoViewHolder(itemView: TodoBinding) : RecyclerView.ViewHolder(itemView.root)
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val curTodo = todos[position]
-        holder.itemView.apply {
-            tvToDoTit
-
-        }
     }
 
     override fun getItemCount(): Int {
-
         return todos.size
     }
 }
