@@ -3,6 +3,7 @@ package com.example.todo_new
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import com.example.todo_new.databinding.ActivityMainBinding
 import com.example.todo_new.databinding.TodoBinding
 import com.google.gson.Gson
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity(), TodoAdapter.TodoInteractionListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.btnAddTodo.isEnabled = false
 
         // setup list view
         binding.vrTodoItems.apply {
@@ -45,6 +48,11 @@ class MainActivity : AppCompatActivity(), TodoAdapter.TodoInteractionListener {
             todoItems.removeIf { it.isChecked }
             mAdapter.notifyDataSetChanged()
             persist()
+        }
+
+        binding.etTodoTitle.addTextChangedListener {
+            binding.btnAddTodo.isEnabled = !it.isNullOrEmpty() && it.toString().length <= 20
+            binding.tilTodoInput.helperText = if (it.toString().length > 20) "Max 20 chars" else ""
         }
     }
 
