@@ -4,18 +4,22 @@ import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_new.databinding.TodoBinding
 
-abstract class TodoAdapter(private val todos: MutableList<Todo>, private val mListener: TodoInteractionListener) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+abstract class TodoAdapter(private val todos: MutableList<Todos>, private val mListener: TodoInteractionListener) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
     class TodoViewHolder(private val view: TodoBinding) : RecyclerView.ViewHolder(view.root) {
 
+        private lateinit var mItem: Todos
+
+        fun getItem() = mItem
+
         // populate the item
-        fun bind(item: Todo, listener: TodoInteractionListener) {
-            view.tvToDoTit.text = item.title
-            view.cbDone.isChecked = item.isChecked
-            strikeThrough(item.isChecked)
+        fun bind(item: Todos, listener: TodoInteractionListener) {
+            mItem = item
+            view.tvToDoTit.text = item.todo
+            view.cbDone.isChecked = item.completed!!
+            strikeThrough(item.completed!!)
             view.cbDone.setOnCheckedChangeListener { _, checked ->
-                item.isChecked = checked
                 strikeThrough(checked)
-                listener.persist()
+                listener.updateTodo(item.id!!, item.apply { completed = checked })
             }
         }
 
@@ -39,6 +43,6 @@ abstract class TodoAdapter(private val todos: MutableList<Todo>, private val mLi
     }
 
     interface TodoInteractionListener {
-        fun persist()
+        fun updateTodo(id: String, data: Todos)
     }
 }
