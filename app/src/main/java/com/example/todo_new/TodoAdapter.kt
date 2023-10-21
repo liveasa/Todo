@@ -14,11 +14,16 @@ abstract class TodoAdapter(private val todos: MutableList<Todos>, private val mL
         // populate the item
         fun bind(item: Todos, listener: TodoInteractionListener) {
             mItem = item
+            // set todo in text view
             view.tvToDoTit.text = item.todo
+            // tick the chechbox based on the completion status
             view.cbDone.isChecked = item.completed!!
+            // strike through the todo if it is completed
             strikeThrough(item.completed!!)
+            // setup check change listener
             view.cbDone.setOnCheckedChangeListener { _, checked ->
                 strikeThrough(checked)
+                // update the todo completion status
                 listener.updateTodo(item.id!!, item.apply { completed = checked })
             }
         }
@@ -35,6 +40,7 @@ abstract class TodoAdapter(private val todos: MutableList<Todos>, private val mL
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val curTodo = todos[position]
+        // render todos item
         holder.bind(curTodo, mListener)
     }
 
